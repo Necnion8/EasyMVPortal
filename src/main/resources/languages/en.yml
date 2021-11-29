@@ -1,0 +1,26 @@
+# by Google-translate
+
+tool-name-anvil-display: "&d&lPortal Naming"
+tool-portal1-wand-display: "&e&lPortal-1 Wand"
+tool-portal2-wand-display: "&b&lPortal-2 Wand"
+
+set-portal1-first-pos: "&7First position set to: ({0}, {1}, {2})"
+set-portal1-second-pos: "&7Second position set to: ({0}, {1}, {2})"
+set-portal2-first-pos: "&7First position set to: ({0}, {1}, {2})"
+set-portal2-second-pos: "&7Second position set to: ({0}, {1}, {2})"
+
+gui-insert-portal-name: "&0Insert portal name."
+gui-insert-portal-name-already-exists: "&4It already existed!"
+
+select-portal1: "&6Please specify the first portal."
+select-portal2: "&6Please specify the second portal."
+
+cancel: "&cCancelled!"
+portal-created: "&aPortal created: &f{0}"
+not-loaded-multiverse: "&cThis world is not loaded by Multiverse!"
+inventory-full: "&cInventory is full!"
+
+config-reloaded: "&aConfiguration reloaded!"
+config-reload-fail: "&cReload failed!"
+player-only: "&cOnly the player can execute it."
+permission-error: "&cYou do not have permission to execute."

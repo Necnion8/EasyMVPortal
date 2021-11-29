@@ -1,0 +1,19 @@
+name: EasyMVPortal
+version: @version@
+main: com.gmail.necnionch.myplugin.easymvportal.bukkit.EasyMVPortal
+api-version: 1.13
+depend: ["Multiverse-Portals"]
+authors: [Necnion8]
+
+commands:
+  easymvportal:
+    aliases: [emvp]
+    usage: "§c/emvp <create/reload>"
+
+permissions:
+  easymvportal.command.help:
+    default: op
+  easymvportal.command.create:
+    default: op
+  easymvportal.command.reload:
+    default: op

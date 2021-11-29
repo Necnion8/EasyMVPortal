@@ -1,0 +1,4 @@
+# If "messages.yml" does not exist, a language file will be generated.
+language: en
+portal1-name: "{name}_in"
+portal2-name: "{name}_out"

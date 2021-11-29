@@ -1,0 +1,26 @@
+# by Necnion8
+
+tool-name-anvil-display: "&d&lポータル名付け"
+tool-portal1-wand-display: "&e&lポータル1 指定杖"
+tool-portal2-wand-display: "&b&lポータル2 指定杖"
+
+set-portal1-first-pos: "&7ポイント1を設定: ({0}, {1}, {2})"
+set-portal1-second-pos: "&7ポイント2を設定: ({0}, {1}, {2})"
+set-portal2-first-pos: "&7ポイント1を設定: ({0}, {1}, {2})"
+set-portal2-second-pos: "&7ポイント2を設定: ({0}, {1}, {2})"
+
+gui-insert-portal-name: "&0ポータル名を入力"
+gui-insert-portal-name-already-exists: "&4既に存在する名前です"
+
+select-portal1: "&6ポータル1の位置を指定してください。"
+select-portal2: "&6ポータル2の位置を指定してください。"
+
+cancel: "&c中止しました！"
+portal-created: "&aポータルを作成しました: &f{0}"
+not-loaded-multiverse: "&cこのワールドはMultiverseによってロードされていません！"
+inventory-full: "&c持ち物がいっぱいです！"
+
+config-reloaded: "&a設定ファイルを再読み込みしました！"
+config-reload-fail: "&c再読み込みに失敗しました！"
+player-only: "&cプレイヤーのみ実行することができます。"
+permission-error: "&c実行に必要な権限がありません。"
