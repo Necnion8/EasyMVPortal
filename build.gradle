@@ -4,7 +4,7 @@ apply plugin: 'java'
 //apply plugin: "Java-library"
 
 group = 'com.gmail.necnionch.myplugin'
-version = '1.0.1'
+version = '1.0.2'
 
 sourceCompatibility = '1.8'
 targetCompatibility = '1.8'
@@ -36,15 +36,15 @@ repositories {
 }
 
 dependencies {
-    compileOnly 'org.spigotmc:spigot-api:1.15.2-R0.1-SNAPSHOT'
+    compileOnly 'org.spigotmc:spigot-api:1.18-R0.1-SNAPSHOT'
 
     implementation files("lib/Multiverse-Core-4.2.2.jar")
     implementation files("lib/Multiverse-Portals-4.2.0.jar")
     implementation files("lib/worldedit-bukkit-7.1.0.jar")
 
 //    compile 'net.wesjd:anvilgui:1.5.1-SNAPSHOT'
-    implementation 'net.wesjd:anvilgui:1.5.1-SNAPSHOT'
-    collectJars 'net.wesjd:anvilgui:1.5.1-SNAPSHOT'
+    implementation 'net.wesjd:anvilgui:1.5.3-SNAPSHOT'
+    collectJars 'net.wesjd:anvilgui:1.5.3-SNAPSHOT'
 }
 
 
