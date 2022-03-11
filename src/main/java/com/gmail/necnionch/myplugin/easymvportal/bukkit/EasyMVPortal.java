@@ -7,7 +7,6 @@ import com.onarandombox.MultiverseCore.MultiverseCore;
 import com.onarandombox.MultiverseCore.api.MVWorldManager;
 import com.onarandombox.MultiversePortals.MultiversePortals;
 import com.onarandombox.MultiversePortals.utils.PortalManager;
-//import net.wesjd.anvilgui.version.VersionMatcher;
 import net.wesjd.anvilgui.version.VersionMatcher;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -22,7 +21,6 @@ import org.bukkit.event.player.PlayerSwapHandItemsEvent;
 import org.bukkit.permissions.Permission;
 import org.bukkit.plugin.java.JavaPlugin;
 
-import java.net.InetAddress;
 import java.util.ArrayList;
 import java.util.HashMap;
 
@@ -38,6 +36,7 @@ public final class EasyMVPortal extends JavaPlugin implements Listener {
     public static final Permission COMMAND_HELP_PERMISSION = new Permission("easymvportal.command.help");
     public static final Permission COMMAND_CREATE_PERMISSION = new Permission("easymvportal.command.create");
     public static final Permission COMMAND_RELOAD_PERMISSION = new Permission("easymvportal.command.reload");
+    private boolean useGUI;
 
     static public EasyMVPortal getInstance() {
         return instance;
@@ -45,15 +44,19 @@ public final class EasyMVPortal extends JavaPlugin implements Listener {
 
     @Override
     public void onEnable() {
-        instance = this;
-
         try {
             new VersionMatcher().match();
-        } catch (RuntimeException e){
-            getLogger().severe(e.getLocalizedMessage());
+            useGUI = true;
+
+        } catch (IllegalStateException e) {
+            getLogger().warning(e.getLocalizedMessage());
+            getLogger().info("ignored it!");
+        } catch (Throwable e) {
+            e.printStackTrace();
             setEnabled(false);
-            return;
         }
+
+        instance = this;
 
         Utils.init(this, mainConfig);
         mainConfig = new MainConfig(this);
@@ -78,6 +81,7 @@ public final class EasyMVPortal extends JavaPlugin implements Listener {
         worldManager = mvPlugin.getMVWorldManager();
         getCommand("easymvportal").setExecutor(new MainCommand(this));
         getServer().getPluginManager().registerEvents(this, this);
+        getServer().getPluginManager().registerEvents(new Event_1_9_Listener(), this);
 
 
         new MetricsLite(this, 9114);
@@ -118,11 +122,13 @@ public final class EasyMVPortal extends JavaPlugin implements Listener {
         return mainConfig;
     }
 
-
     public MessageConfig getMessageConfig() {
         return messageConfig;
     }
 
+    public boolean isUseGUI() {
+        return useGUI;
+    }
 
 
     @EventHandler(priority = EventPriority.LOWEST)
@@ -156,18 +162,21 @@ public final class EasyMVPortal extends JavaPlugin implements Listener {
     }
 
     @EventHandler(priority = EventPriority.LOWEST)
-    public void onSwapHand(PlayerSwapHandItemsEvent event) {
-        PortalCreator creator = creatorSessions.get(event.getPlayer());
-        if (creator != null)
-            creator.onEvent(event);
-    }
-
-    @EventHandler(priority = EventPriority.LOWEST)
     public void onPlayerDeath(PlayerDeathEvent event) {
         PortalCreator creator = creatorSessions.get(event.getEntity());
         if (creator != null)
             creator.onEvent(event);
     }
 
+
+    public class Event_1_9_Listener implements Listener {
+        @EventHandler(priority = EventPriority.LOWEST)
+        public void onSwapHand(PlayerSwapHandItemsEvent event) {
+            PortalCreator creator = creatorSessions.get(event.getPlayer());
+            if (creator != null)
+                creator.onEvent(event);
+        }
+
+    }
 
 }

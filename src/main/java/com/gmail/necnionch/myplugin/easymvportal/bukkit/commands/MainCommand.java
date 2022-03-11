@@ -29,6 +29,14 @@ public class MainCommand implements CommandExecutor, TabCompleter {
 
     @Override
     public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
+        if (sender instanceof Player) {
+            PortalCreator session = instance.getCreatorSession(((Player) sender), false);
+            if (session != null) {
+                session.onCommand(args);
+                return true;
+            }
+        }
+
         if (args.length == 0 && sender instanceof Player) {
             if (checkPerms(sender, EasyMVPortal.COMMAND_CREATE_PERMISSION))
                 cmdCreate(sender);
@@ -51,6 +59,13 @@ public class MainCommand implements CommandExecutor, TabCompleter {
     @Override
     public @Nullable List<String> onTabComplete(@NotNull CommandSender sender, @NotNull Command command, @NotNull String alias, @NotNull String[] args) {
         if (args.length == 1 && sender.hasPermission(EasyMVPortal.COMMAND_HELP_PERMISSION)) {
+            if (sender instanceof Player) {
+                PortalCreator session = instance.getCreatorSession(((Player) sender), false);
+                if (session != null) {
+                    return Collections.emptyList();
+                }
+            }
+
             List<String> entries = new ArrayList<>();
             if (sender.hasPermission(EasyMVPortal.COMMAND_CREATE_PERMISSION))
                 entries.add("create");
@@ -77,7 +92,7 @@ public class MainCommand implements CommandExecutor, TabCompleter {
         if (sender instanceof Player) {
             PlayerInventory inv = ((Player) sender).getInventory();
 
-            if (!Material.AIR.equals(inv.getItemInMainHand().getType())) {
+            if (!Material.AIR.equals(inv.getItemInHand().getType())) {
                 int emptySlot = inv.firstEmpty();
                 // ホットバーに空きがある？
                 if (0 <= emptySlot && emptySlot <= 8) {
@@ -88,8 +103,8 @@ public class MainCommand implements CommandExecutor, TabCompleter {
                         return;
                     }
                     // メインハンドアイテムを別の空きスロットに
-                    inv.setItem(emptySlot, inv.getItemInMainHand());
-                    inv.setItemInMainHand(null);
+                    inv.setItem(emptySlot, inv.getItemInHand());
+                    inv.setItemInHand(null);
                 }
             }
 

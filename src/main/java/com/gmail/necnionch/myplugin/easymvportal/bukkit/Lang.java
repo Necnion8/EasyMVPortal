@@ -22,6 +22,9 @@ public enum Lang {
     GUI_INSERT_PORTAL_NAME("&0Insert portal name."),
     GUI_INSERT_PORTAL_NAME_ALREADY_EXISTS("&4It already existed!"),
 
+    CREATE_AND_INSERT_PORTAL_NAME("&6Please execute &f&n/emvp (portalName)"),
+    ALREADY_EXISTS_PORTAL_NAME("&cAlready exists portal name!"),
+
     SELECT_PORTAL1("&6Please specify the first portal."),
     SELECT_PORTAL2("&6Please specify the second portal."),
 

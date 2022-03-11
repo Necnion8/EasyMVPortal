@@ -12,6 +12,9 @@ set-portal2-second-pos: "&7ポイント2を設定: ({0}, {1}, {2})"
 gui-insert-portal-name: "&0ポータル名を入力"
 gui-insert-portal-name-already-exists: "&4既に存在する名前です"
 
+create-and-insert-portal-name: "&f&n/emvp (portalName)&6 を実行してポータルを作成してください。"
+already-exists-portal-name: "&c既に存在するポータル名です"
+
 select-portal1: "&6ポータル1の位置を指定してください。"
 select-portal2: "&6ポータル2の位置を指定してください。"
 

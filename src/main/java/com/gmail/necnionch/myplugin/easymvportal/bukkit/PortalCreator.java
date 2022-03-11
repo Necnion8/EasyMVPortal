@@ -53,7 +53,7 @@ public class PortalCreator {
         currentPortal = Portal.PORTAL_A;
         Lang.SELECT_PORTAL1.sendTo(creator);
         replaceMainHandItem();
-        creator.playSound(creator.getLocation(), Sound.ENTITY_EXPERIENCE_ORB_PICKUP, 1f, 2f);
+        Sound.EXPERIENCE_ORB_PICKUP.playTo(creator, 1f, 2f);
 
     }
 
@@ -104,7 +104,7 @@ public class PortalCreator {
             tool.setItemMeta(meta);
         }
 
-        creator.getInventory().setItemInMainHand(tool);
+        creator.getInventory().setItemInHand(tool);
     }
 
     private void createPortals(String p1Name, String p2Name) {
@@ -134,7 +134,7 @@ public class PortalCreator {
 
     // events
     public void onEvent(PlayerInteractEvent event) {
-        if (!tool.equals(creator.getInventory().getItemInMainHand()) || !creator.equals(event.getPlayer())) return;
+        if (!tool.equals(creator.getInventory().getItemInHand()) || !creator.equals(event.getPlayer())) return;
         event.setCancelled(true);
         Location bLoc = (event.getClickedBlock() != null) ? event.getClickedBlock().getLocation() : null;
 
@@ -179,11 +179,11 @@ public class PortalCreator {
 
                     Lang.SELECT_PORTAL2.sendTo(creator);
                     replaceMainHandItem();
-                    creator.playSound(creator.getLocation(), Sound.ENTITY_EXPERIENCE_ORB_PICKUP, 1f, 2f);
+                    Sound.NOTE_BASS.playTo(creator, 1f, 2f);
 
                 } else {
                     // not selected
-                    creator.playSound(creator.getLocation(), "block.note_block.bass", 1f, 1f);
+                    Sound.NOTE_BASS.playTo(creator, 1f, 1f);
                 }
 
             } else if (Portal.PORTAL_B.equals(currentPortal)) {
@@ -191,13 +191,17 @@ public class PortalCreator {
                     currentPortal = null;
                     portalB1.setYaw(creator.getLocation().getYaw());
 
-                    openAnvilGui(Lang.GUI_INSERT_PORTAL_NAME.format());
+                    if (instance.isUseGUI()) {
+                        openAnvilGui(Lang.GUI_INSERT_PORTAL_NAME.format());
+                    } else {
+                        Lang.CREATE_AND_INSERT_PORTAL_NAME.sendTo(creator);
+                    }
                     replaceMainHandItem();
-                    creator.playSound(creator.getLocation(), Sound.ENTITY_EXPERIENCE_ORB_PICKUP, 1f, 2f);
+                    Sound.EXPERIENCE_ORB_PICKUP.playTo(creator, 1f, 2f);
 
                 } else {
                     // not selected
-                    creator.playSound(creator.getLocation(), "block.note_block.bass", 1f, 1f);
+                    Sound.NOTE_BASS.playTo(creator, 1f, 1f);
                 }
             }
         }
@@ -210,7 +214,7 @@ public class PortalCreator {
 
         Lang.CANCEL.sendTo(creator);
         close();
-        creator.playSound(creator.getLocation(), Sound.ENTITY_BLAZE_HURT, 1f, 0f);
+        Sound.BLAZE_HURT.playTo(creator, 1f, 0f);
     }
 
     public void onEvent(InventoryClickEvent event) {
@@ -228,6 +232,43 @@ public class PortalCreator {
     public void onEvent(PlayerSwapHandItemsEvent event) {
         if (!tool.equals(event.getOffHandItem()) || !creator.equals(event.getPlayer())) return;
         event.setCancelled(true);
+    }
+
+    public void onCommand(String[] args) {
+        if (args.length < 1) {
+            Lang.CREATE_AND_INSERT_PORTAL_NAME.sendTo(creator);
+            return;
+        }
+
+        if (Portal.PORTAL_A.equals(currentPortal)) {
+            Lang.SELECT_PORTAL1.sendTo(creator);
+            return;
+//        } else if (Portal.PORTAL_B.equals(currentPortal)) {
+        } else if (portalB1 == null || portalB2 == null) {
+            Lang.SELECT_PORTAL2.sendTo(creator);
+            return;
+        }
+
+        String name = String.join("_", args).replace("　", "_");
+        String p1Name = instance.getPluginConfig().getPortal1Name(name);
+        String p2Name = instance.getPluginConfig().getPortal2Name(name);
+
+        boolean exists = instance.getPortalManager().getAllPortals().stream()
+                .map(MVPortal::getName)
+                .anyMatch(p -> p1Name.equalsIgnoreCase(p) || p2Name.equalsIgnoreCase(p));
+
+        if (exists) {
+            // retry
+            Lang.ALREADY_EXISTS_PORTAL_NAME.sendTo(creator);
+            Lang.CREATE_AND_INSERT_PORTAL_NAME.sendTo(creator);
+            Sound.NOTE_BASS.playTo(creator, 1f, 1f);
+        } else {
+            // create
+            createPortals(p1Name, p2Name);
+            Lang.PORTAL_CREATED.sendTo(creator, name);
+            close();
+            Sound.PLAYER_LEVELUP.playTo(creator, 1f, 1f);
+        }
     }
 
 
@@ -275,21 +316,20 @@ public class PortalCreator {
         if (anvilGUI != null && !guiRetry) {
             Lang.CANCEL.sendTo(creator);
             close();
-            creator.playSound(creator.getLocation(), "block.note_block.bass", 1f, 0f);
+            Sound.NOTE_BASS.playTo(creator, 1f, 0f);
         }
     }
 
     private AnvilGUI.Response onAnvilComplete(Player player, String text) {
-        text = text.replaceAll(" ", "_").replaceAll("　", "_");
+        String name = text.replaceAll(" ", "_").replaceAll("　", "_");
+        String p1Name = instance.getPluginConfig().getPortal1Name(name);
+        String p2Name = instance.getPluginConfig().getPortal2Name(name);
 
-        List<String> names = instance.getPortalManager().getAllPortals().stream()
+        boolean exists = instance.getPortalManager().getAllPortals().stream()
                 .map(MVPortal::getName)
-                .collect(Collectors.toList());
-        String p1Name = instance.getPluginConfig().getPortal1Name(text);
-        String p2Name = instance.getPluginConfig().getPortal2Name(text);
+                .anyMatch(p -> p1Name.equalsIgnoreCase(p) || p2Name.equalsIgnoreCase(p));
 
-        // already exists check
-        if (names.contains(p1Name) || names.contains(p2Name)) {
+        if (exists) {
             guiRetry = true;
             openAnvilGui(Lang.GUI_INSERT_PORTAL_NAME_ALREADY_EXISTS.format());
             return AnvilGUI.Response.close();
@@ -299,9 +339,9 @@ public class PortalCreator {
         // portal creation
         createPortals(p1Name, p2Name);
 
-        Lang.PORTAL_CREATED.sendTo(creator, text);
+        Lang.PORTAL_CREATED.sendTo(creator, name);
         close();
-        creator.playSound(creator.getLocation(), Sound.ENTITY_PLAYER_LEVELUP, 1f, 1f);
+        Sound.PLAYER_LEVELUP.playTo(creator, 1f, 1f);
         return AnvilGUI.Response.close();
     }
 

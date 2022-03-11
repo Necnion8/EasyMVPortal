@@ -12,6 +12,9 @@ set-portal2-second-pos: "&7Second position set to: ({0}, {1}, {2})"
 gui-insert-portal-name: "&0Insert portal name."
 gui-insert-portal-name-already-exists: "&4It already existed!"
 
+create-and-insert-portal-name: "&6Please execute &f&n/emvp (portalName)"
+already-exists-portal-name: "&cAlready exists portal name!"
+
 select-portal1: "&6Please specify the first portal."
 select-portal2: "&6Please specify the second portal."
 

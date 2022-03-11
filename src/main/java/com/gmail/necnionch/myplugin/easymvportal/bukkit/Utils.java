@@ -2,6 +2,8 @@ package com.gmail.necnionch.myplugin.easymvportal.bukkit;
 
 import com.gmail.necnionch.myplugin.easymvportal.bukkit.config.MainConfig;
 import org.bukkit.Bukkit;
+import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.PlayerInventory;
 
 import java.io.File;
 import java.io.IOException;
@@ -17,6 +19,13 @@ public class Utils {
     static void init(EasyMVPortal plugin, MainConfig config) {
         Utils.plugin = plugin;
         Utils.config = config;
+
+//        try {
+//            PlayerInventory.class.getMethod("getItemInMainHand")
+//        } catch (NoSuchMethodException e) {
+//            // 1.8 older
+//            PlayerInventory.class.getMethod("getItem")
+//        }
     }
 
     public static void debug(String m) {
