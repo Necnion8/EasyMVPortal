@@ -2,8 +2,6 @@ package com.gmail.necnionch.myplugin.easymvportal.bukkit;
 
 import com.gmail.necnionch.myplugin.easymvportal.bukkit.config.MainConfig;
 import org.bukkit.Bukkit;
-import org.bukkit.inventory.ItemStack;
-import org.bukkit.inventory.PlayerInventory;
 
 import java.io.File;
 import java.io.IOException;
