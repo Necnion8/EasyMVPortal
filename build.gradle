@@ -43,8 +43,8 @@ dependencies {
     implementation files("lib/worldedit-bukkit-7.1.0.jar")
 
 //    compile 'net.wesjd:anvilgui:1.5.1-SNAPSHOT'
-    implementation 'net.wesjd:anvilgui:1.5.3-SNAPSHOT'
-    collectJars 'net.wesjd:anvilgui:1.5.3-SNAPSHOT'
+    implementation 'net.wesjd:anvilgui:1.6.0-SNAPSHOT'
+    collectJars 'net.wesjd:anvilgui:1.6.0-SNAPSHOT'
 }
 
 
