@@ -19,7 +19,6 @@ import org.bukkit.inventory.meta.ItemMeta;
 
 import java.util.Collections;
 import java.util.List;
-import java.util.function.Function;
 
 public class PortalCreator {
     private EasyMVPortal instance;
