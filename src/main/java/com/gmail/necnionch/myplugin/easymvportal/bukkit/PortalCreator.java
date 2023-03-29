@@ -17,6 +17,10 @@ import org.bukkit.event.player.PlayerSwapHandItemsEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 
+import java.util.Collections;
+import java.util.List;
+import java.util.function.Function;
+
 public class PortalCreator {
     private EasyMVPortal instance;
     private Player creator;
@@ -317,8 +321,8 @@ public class PortalCreator {
         }
     }
 
-    private AnvilGUI.Response onAnvilComplete(Player player, String text) {
-        String name = text.replaceAll(" ", "_").replaceAll("　", "_");
+    private List<AnvilGUI.ResponseAction> onAnvilComplete(AnvilGUI.Completion completion) {
+        String name = completion.getText().replaceAll(" ", "_").replaceAll("　", "_");
         String p1Name = instance.getPluginConfig().getPortal1Name(name);
         String p2Name = instance.getPluginConfig().getPortal2Name(name);
 
@@ -329,7 +333,7 @@ public class PortalCreator {
         if (exists) {
             guiRetry = true;
             openAnvilGui(Lang.GUI_INSERT_PORTAL_NAME_ALREADY_EXISTS.format());
-            return AnvilGUI.Response.close();
+            return Collections.singletonList(AnvilGUI.ResponseAction.close());
         }
         guiRetry = false;
 
@@ -339,7 +343,7 @@ public class PortalCreator {
         Lang.PORTAL_CREATED.sendTo(creator, name);
         close();
         Sound.PLAYER_LEVELUP.playTo(creator, 1f, 1f);
-        return AnvilGUI.Response.close();
+        return Collections.singletonList(AnvilGUI.ResponseAction.close());
     }
 
 
