@@ -2,7 +2,9 @@
 
 tool-name-anvil-display: "&d&lPortal Naming"
 tool-portal1-wand-display: "&e&lPortal-1 Wand"
+tool-portal1-wand-lore: "&eShift right click to select next portal"
 tool-portal2-wand-display: "&b&lPortal-2 Wand"
+tool-portal2-wand-lore: "&eShift right click to enter portal name"
 
 set-portal1-first-pos: "&7First position set to: ({0}, {1}, {2})"
 set-portal1-second-pos: "&7Second position set to: ({0}, {1}, {2})"

@@ -17,6 +17,7 @@ import org.bukkit.event.player.PlayerSwapHandItemsEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 
@@ -89,18 +90,21 @@ public class PortalCreator {
             tool.setType(getGoldenHoe());
             meta = tool.getItemMeta();
             meta.setDisplayName(Lang.TOOL_PORTAL1_WAND_DISPLAY.format());
+            meta.setLore(Arrays.asList(Lang.TOOL_PORTAL1_WAND_LORE.formatMultiline()));
             tool.setItemMeta(meta);
 
         } else if (Portal.PORTAL_B.equals(currentPortal)) {
             tool.setType(Material.DIAMOND_HOE);
             meta = tool.getItemMeta();
             meta.setDisplayName(Lang.TOOL_PORTAL2_WAND_DISPLAY.format());
+            meta.setLore(Arrays.asList(Lang.TOOL_PORTAL2_WAND_LORE.formatMultiline()));
             tool.setItemMeta(meta);
 
         } else {
             tool.setType(Material.ANVIL);
             meta = tool.getItemMeta();
             meta.setDisplayName(Lang.TOOL_NAME_ANVIL_DISPLAY.format());
+            meta.setLore(Collections.emptyList());
             tool.setItemMeta(meta);
         }
 

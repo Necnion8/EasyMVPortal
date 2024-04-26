@@ -13,7 +13,9 @@ public enum Lang {
 
     TOOL_NAME_ANVIL_DISPLAY("&d&lPortal Naming"),
     TOOL_PORTAL1_WAND_DISPLAY("&e&lPortal-1 Wand"),
+    TOOL_PORTAL1_WAND_LORE("&eShift right click to select next portal"),
     TOOL_PORTAL2_WAND_DISPLAY("&b&lPortal-2 Wand"),
+    TOOL_PORTAL2_WAND_LORE("&eShift right click to enter portal name"),
     SET_PORTAL1_FIRST_POS("&7First position set to: ({0}, {1}, {2})"),
     SET_PORTAL1_SECOND_POS("&7Second position set to: ({0}, {1}, {2})"),
     SET_PORTAL2_FIRST_POS("&7First position set to: ({0}, {1}, {2})"),

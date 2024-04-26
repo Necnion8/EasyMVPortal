@@ -2,7 +2,9 @@
 
 tool-name-anvil-display: "&d&lポータル名付け"
 tool-portal1-wand-display: "&e&lポータル1 指定杖"
+tool-portal1-wand-lore: "&eシフト右クリックで次のポータルを選択します"
 tool-portal2-wand-display: "&b&lポータル2 指定杖"
+tool-portal2-wand-lore: "&eシフト右クリックでポータル名を入力します"
 
 set-portal1-first-pos: "&7ポイント1を設定: ({0}, {1}, {2})"
 set-portal1-second-pos: "&7ポイント2を設定: ({0}, {1}, {2})"
