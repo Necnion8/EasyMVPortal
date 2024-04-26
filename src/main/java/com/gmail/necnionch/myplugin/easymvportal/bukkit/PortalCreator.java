@@ -303,6 +303,7 @@ public class PortalCreator {
         if (anvilGUI != null) {
             anvilGUI.closeInventory();
         }
+        guiRetry = false;
         anvilGUI = new AnvilGUI.Builder()
                 .title(title)
                 .text("name")
