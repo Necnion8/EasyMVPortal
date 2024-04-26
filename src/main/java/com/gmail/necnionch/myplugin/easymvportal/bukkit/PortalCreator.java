@@ -308,11 +308,11 @@ public class PortalCreator {
                 .text("name")
                 .plugin(instance)
                 .onClose(this::onAnvilClose)
-                .onComplete(this::onAnvilComplete)
+                .onClick(this::onAnvilClick)
                 .open(creator);
     }
 
-    private void onAnvilClose(Player player) {
+    private void onAnvilClose(AnvilGUI.StateSnapshot stateSnapshot) {
         if (anvilGUI != null && !guiRetry) {
             Lang.CANCEL.sendTo(creator);
             close();
@@ -320,8 +320,8 @@ public class PortalCreator {
         }
     }
 
-    private List<AnvilGUI.ResponseAction> onAnvilComplete(AnvilGUI.Completion completion) {
-        String name = completion.getText().replaceAll(" ", "_").replaceAll("　", "_");
+    private List<AnvilGUI.ResponseAction> onAnvilClick(int slot, AnvilGUI.StateSnapshot stateSnapshot) {
+        String name = stateSnapshot.getText().replaceAll(" ", "_").replaceAll("　", "_");
         String p1Name = instance.getPluginConfig().getPortal1Name(name);
         String p2Name = instance.getPluginConfig().getPortal2Name(name);
 
