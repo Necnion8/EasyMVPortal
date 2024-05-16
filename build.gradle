@@ -4,7 +4,7 @@ apply plugin: 'java'
 //apply plugin: "Java-library"
 
 group = 'com.gmail.necnionch.myplugin'
-version = '1.1.2'
+version = '1.1.2+1.20.6'
 
 sourceCompatibility = '1.8'
 targetCompatibility = '1.8'
@@ -42,8 +42,8 @@ dependencies {
     implementation files("lib/Multiverse-Portals-4.2.0.jar")
     implementation files("lib/worldedit-bukkit-7.1.0.jar")
 
-    implementation 'net.wesjd:anvilgui:1.9.3-SNAPSHOT'
-    collectJars 'net.wesjd:anvilgui:1.9.3-SNAPSHOT'
+    implementation 'net.wesjd:anvilgui:1.9.4-SNAPSHOT'
+    collectJars 'net.wesjd:anvilgui:1.9.4-SNAPSHOT'
 }
 
 
