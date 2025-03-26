@@ -42,8 +42,8 @@ dependencies {
     implementation files("lib/Multiverse-Portals-4.2.0.jar")
     implementation files("lib/worldedit-bukkit-7.1.0.jar")
 
-    implementation 'net.wesjd:anvilgui:1.10.3-SNAPSHOT'
-    collectJars 'net.wesjd:anvilgui:1.10.3-SNAPSHOT'
+    implementation 'net.wesjd:anvilgui:1.10.4-SNAPSHOT'
+    collectJars 'net.wesjd:anvilgui:1.10.4-SNAPSHOT'
 }
 
 
