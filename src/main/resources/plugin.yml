@@ -1,9 +1,10 @@
 name: EasyMVPortal
-version: @version@
+version: '${version}'
 main: com.gmail.necnionch.myplugin.easymvportal.bukkit.EasyMVPortal
 api-version: 1.13
 depend: ["Multiverse-Portals"]
 authors: [Necnion8]
+website: https://github.com/Necnion8/EasyMVPortal
 
 commands:
   easymvportal:

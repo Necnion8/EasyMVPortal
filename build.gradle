@@ -1,18 +1,12 @@
-import org.apache.tools.ant.filters.ReplaceTokens
+import com.github.jengelman.gradle.plugins.shadow.tasks.ShadowJar
 
-apply plugin: 'java'
-//apply plugin: "Java-library"
-
-group = 'com.gmail.necnionch.myplugin'
-version = '1.1.2+1.21.3'
-
-sourceCompatibility = '1.8'
-targetCompatibility = '1.8'
-
-configurations {
-    collectJars
+plugins {
+    id 'java'
+    id "com.gradleup.shadow" version "8.3.0"
 }
 
+group = 'com.gmail.necnionch.myplugin.easymvportal'
+version = '1.1.2+1.21.4'
 
 repositories {
     mavenCentral()
@@ -38,33 +32,42 @@ repositories {
 dependencies {
     compileOnly 'org.spigotmc:spigot-api:1.18-R0.1-SNAPSHOT'
 
-    implementation files("lib/Multiverse-Core-4.2.2.jar")
-    implementation files("lib/Multiverse-Portals-4.2.0.jar")
-    implementation files("lib/worldedit-bukkit-7.1.0.jar")
+    compileOnly files("lib/Multiverse-Core-4.2.2.jar")
+    compileOnly files("lib/Multiverse-Portals-4.2.0.jar")
+    compileOnly files("lib/worldedit-bukkit-7.1.0.jar")
 
     implementation 'net.wesjd:anvilgui:1.10.4-SNAPSHOT'
-    collectJars 'net.wesjd:anvilgui:1.10.4-SNAPSHOT'
 }
 
+tasks.named("shadowJar", ShadowJar) {
+    archiveClassifier.set("")
+    dependencies {
+        exclude "/META-INF/**"
+    }
+    relocate "net.wesjd.anvilgui", "${project.group}.libs.anvilgui"
+}
+
+def targetJavaVersion = 8
+java {
+    def javaVersion = JavaVersion.toVersion(targetJavaVersion)
+    sourceCompatibility = javaVersion
+    targetCompatibility = javaVersion
+    if (JavaVersion.current() < javaVersion) {
+        toolchain.languageVersion = JavaLanguageVersion.of(targetJavaVersion)
+    }
+}
+
+tasks.withType(JavaCompile).configureEach {
+    if (targetJavaVersion >= 10 || JavaVersion.current().isJava10Compatible()) {
+        options.release.set(targetJavaVersion)
+    }
+}
 
 processResources {
-//    from(sourceSets.main.resources.srcDirs) {
-        filter(
-                ReplaceTokens,
-                tokens: [version: version]
-        )
-//    }
-}
-
-jar {
-    from {
-        configurations.collectJars.collect {
-            it.isDirectory() ? it : zipTree(it)
-        }
-    }
-
-    into("source") {
-        from "src/main/java"
+    def props = [version: version]
+    inputs.properties props
+    filteringCharset 'UTF-8'
+    filesMatching('plugin.yml') {
+        expand props
     }
 }
-compileJava.options.encoding = 'UTF-8'
