@@ -23,19 +23,20 @@ import org.bukkit.plugin.java.JavaPlugin;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.logging.Level;
 
 public final class EasyMVPortal extends JavaPlugin implements Listener {
+    public static final Permission COMMAND_HELP_PERMISSION = new Permission("easymvportal.command.help");
+    public static final Permission COMMAND_CREATE_PERMISSION = new Permission("easymvportal.command.create");
+    public static final Permission COMMAND_RELOAD_PERMISSION = new Permission("easymvportal.command.reload");
     private static EasyMVPortal instance = null;
+    private final HashMap<Player, PortalCreator> creatorSessions = new HashMap<>();
     private MainConfig mainConfig;
     private MessageConfig messageConfig;
     private MultiverseCore mvPlugin;
     private MultiversePortals mvpPlugin;
     private PortalManager portalManager;
     private MVWorldManager worldManager;
-    private HashMap<Player, PortalCreator> creatorSessions = new HashMap<>();
-    public static final Permission COMMAND_HELP_PERMISSION = new Permission("easymvportal.command.help");
-    public static final Permission COMMAND_CREATE_PERMISSION = new Permission("easymvportal.command.create");
-    public static final Permission COMMAND_RELOAD_PERMISSION = new Permission("easymvportal.command.reload");
     private boolean useGUI;
 
     static public EasyMVPortal getInstance() {
@@ -52,7 +53,7 @@ public final class EasyMVPortal extends JavaPlugin implements Listener {
             getLogger().warning(e.getLocalizedMessage());
             getLogger().info("ignored it!");
         } catch (Throwable e) {
-            e.printStackTrace();
+            getLogger().log(Level.SEVERE, "Unexpected error occurred while trying to load plugin: Unsupported server version?", e);
             setEnabled(false);
         }
 
@@ -68,7 +69,7 @@ public final class EasyMVPortal extends JavaPlugin implements Listener {
             mvPlugin = (MultiverseCore) getServer().getPluginManager().getPlugin("Multiverse-Core");
             mvpPlugin = (MultiversePortals) getServer().getPluginManager().getPlugin("Multiverse-Portals");
         } catch (Exception e) {
-            e.printStackTrace();
+            getLogger().log(Level.WARNING, "Failed to load Multiverse-Portals!", e);
         }
 
         if (mvPlugin == null || mvpPlugin == null) {
@@ -91,7 +92,6 @@ public final class EasyMVPortal extends JavaPlugin implements Listener {
     public void onDisable() {
         new ArrayList<>(creatorSessions.values())
                 .forEach(PortalCreator::close);
-
     }
 
 

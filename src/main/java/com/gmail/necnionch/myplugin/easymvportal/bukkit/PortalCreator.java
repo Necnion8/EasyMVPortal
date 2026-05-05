@@ -22,8 +22,8 @@ import java.util.Collections;
 import java.util.List;
 
 public class PortalCreator {
-    private EasyMVPortal instance;
-    private Player creator;
+    private final EasyMVPortal instance;
+    private final Player creator;
     //
     private ItemStack tool;
     private Location portalA1, portalA2, portalB1, portalB2;

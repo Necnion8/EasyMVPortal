@@ -42,7 +42,7 @@ public enum Lang {
 
     ;
 
-    private String defaultMessage;
+    private final String defaultMessage;
 
     Lang(String def) {
         this.defaultMessage = def;

@@ -17,13 +17,6 @@ public class Utils {
     static void init(EasyMVPortal plugin, MainConfig config) {
         Utils.plugin = plugin;
         Utils.config = config;
-
-//        try {
-//            PlayerInventory.class.getMethod("getItemInMainHand")
-//        } catch (NoSuchMethodException e) {
-//            // 1.8 older
-//            PlayerInventory.class.getMethod("getItem")
-//        }
     }
 
     public static void debug(String m) {

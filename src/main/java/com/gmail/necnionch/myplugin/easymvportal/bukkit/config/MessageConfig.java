@@ -10,8 +10,8 @@ import java.io.*;
 import java.util.logging.Logger;
 
 public class MessageConfig {
-    private JavaPlugin plugin;
-    private YamlConfiguration config = null;
+    private final JavaPlugin plugin;
+    private YamlConfiguration config;
 
     public MessageConfig(JavaPlugin plugin) {
         this.plugin = plugin;
@@ -32,7 +32,7 @@ public class MessageConfig {
                 copyDone = Utils.copyResourceToFile("languages/" + defaultLangName + ".yml", outFile.toPath());
 
             } catch (IOException e) {
-                e.printStackTrace();
+                getLog().severe("Failed to copy language file: " + e.getMessage());
             }
             if (!copyDone) {
                 getLog().severe("The language file could not be extracted.");
@@ -53,7 +53,7 @@ public class MessageConfig {
             loadDone = true;
 
         } catch (InvalidConfigurationException | IOException e) {
-            e.printStackTrace();
+            getLog().severe("Failed to load config file: " + e.getMessage());
         }
         if (!loadDone) {
             getLog().severe("The language file could not be loaded.");

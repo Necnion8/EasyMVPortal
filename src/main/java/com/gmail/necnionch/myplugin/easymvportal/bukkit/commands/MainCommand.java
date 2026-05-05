@@ -20,7 +20,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 public class MainCommand implements CommandExecutor, TabCompleter {
-    private EasyMVPortal instance;
+    private final EasyMVPortal instance;
 
     public MainCommand(EasyMVPortal plugin) {
         instance = plugin;
@@ -28,7 +28,7 @@ public class MainCommand implements CommandExecutor, TabCompleter {
 
 
     @Override
-    public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
+    public boolean onCommand(@NotNull CommandSender sender, @NotNull Command c, @NotNull String s, @NotNull String[] args) {
         if (sender instanceof Player) {
             PortalCreator session = instance.getCreatorSession(((Player) sender), false);
             if (session != null) {

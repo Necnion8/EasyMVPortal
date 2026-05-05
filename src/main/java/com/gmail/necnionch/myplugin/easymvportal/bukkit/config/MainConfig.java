@@ -6,8 +6,8 @@ import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.plugin.java.JavaPlugin;
 
 public class MainConfig extends BukkitConfigDriver {
+    private final String defaultPrefix = "§7[§ee§aMVP§7] §r";
     private boolean isDebug = false;
-    private String defaultPrefix = "§7[§ee§aMVP§7] §r";
     private String cachedPrefix = null;
 
     public MainConfig(JavaPlugin plugin) {
