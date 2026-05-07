@@ -53,6 +53,9 @@ public class EMVPManagerImpl5 implements EMVPManager {
             throw new RuntimeException("Failed to load Multiverse-Portals v5", e);
         }
 
+        if (mvp.getDescription().getVersion().startsWith("5.0.") || mvp.getDescription().getVersion().startsWith("5.1.")) {
+            throw new RuntimeException("Multiverse-Portals v5.2 or later is required");
+        }
         return new EMVPManagerImpl5(coreApi, portalsApi, mvp);
     }
 
