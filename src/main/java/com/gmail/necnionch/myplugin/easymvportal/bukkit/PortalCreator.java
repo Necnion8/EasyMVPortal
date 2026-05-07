@@ -1,8 +1,7 @@
 package com.gmail.necnionch.myplugin.easymvportal.bukkit;
 
-import com.onarandombox.MultiverseCore.api.MultiverseWorld;
-import com.onarandombox.MultiversePortals.MVPortal;
-import com.onarandombox.MultiversePortals.PortalLocation;
+import com.gmail.necnionch.myplugin.easymvportal.bukkit.mvp.EMVPManager;
+import com.gmail.necnionch.myplugin.easymvportal.bukkit.mvp.EMVPortal;
 import net.wesjd.anvilgui.AnvilGUI;
 import org.bukkit.Location;
 import org.bukkit.Material;
@@ -22,8 +21,17 @@ import java.util.Collections;
 import java.util.List;
 
 public class PortalCreator {
+
+    private static final Material TOOL_MATERIAL;
+
+    static {
+        Material m = Material.getMaterial("GOLDEN_HOE");
+        TOOL_MATERIAL = m != null ? m : Material.getMaterial("GOLD_HOE");  // legacy
+    }
+
     private final EasyMVPortal instance;
     private final Player creator;
+    private final EMVPManager mvp;
     //
     private ItemStack tool;
     private Location portalA1, portalA2, portalB1, portalB2;
@@ -38,6 +46,7 @@ public class PortalCreator {
     public PortalCreator(EasyMVPortal instance, Player creator) {
         this.instance = instance;
         this.creator = creator;
+        this.mvp = instance.getMVP();
     }
 
     static public PortalCreator getCreator(Player player, boolean create) {
@@ -87,7 +96,7 @@ public class PortalCreator {
         ItemMeta meta;
 
         if (Portal.PORTAL_A.equals(currentPortal)) {
-            tool.setType(getGoldenHoe());
+            tool.setType(TOOL_MATERIAL);
             meta = tool.getItemMeta();
             meta.setDisplayName(Lang.TOOL_PORTAL1_WAND_DISPLAY.format());
             meta.setLore(Arrays.asList(Lang.TOOL_PORTAL1_WAND_LORE.formatMultiline()));
@@ -111,18 +120,12 @@ public class PortalCreator {
         creator.getInventory().setItemInHand(tool);
     }
 
-    private void createPortals(String p1Name, String p2Name) {
-        MultiverseWorld p1World = instance.getWorldManager().getMVWorld(portalA1.getWorld());
-        MultiverseWorld p2World = instance.getWorldManager().getMVWorld(portalB1.getWorld());
-        PortalLocation p1Loc = new PortalLocation(portalA1.toVector(), portalA2.toVector(), p1World);
-        PortalLocation p2Loc = new PortalLocation(portalB1.toVector(), portalB2.toVector(), p2World);
-        MVPortal p1 = new MVPortal(instance.getMvpPlugin(), p1Name, creator.getName(), p1Loc);
-        MVPortal p2 = new MVPortal(instance.getMvpPlugin(), p2Name, creator.getName(), p2Loc);
-        instance.getPortalManager().addPortal(p1);
-        instance.getPortalManager().addPortal(p2);
-        p1.setDestination("p:" + p2Name + ":" + yawToDirection(portalB1.getYaw() + 180));
-        p2.setDestination("p:" + p1Name + ":" + yawToDirection(portalA1.getYaw() + 180));
-
+    private boolean createPortals(String p1Name, String p2Name) {
+        return mvp.createPortals(
+                creator.getName(),
+                p1Name, portalA1.getWorld(), portalA1, portalA2,
+                p2Name, portalB1.getWorld(), portalB1, portalB2
+        );
     }
 
     public void selectToolItem() {
@@ -143,7 +146,7 @@ public class PortalCreator {
         Location bLoc = (event.getClickedBlock() != null) ? event.getClickedBlock().getLocation() : null;
 
         if (Action.LEFT_CLICK_BLOCK.equals(event.getAction())) {
-            if (!instance.getWorldManager().isMVWorld(bLoc.getWorld())) {
+            if (!mvp.isMVWorld(bLoc.getWorld())) {
                 Lang.NOT_LOADED_MULTIVERSE.sendTo(creator);
                 return;
             }
@@ -161,7 +164,7 @@ public class PortalCreator {
             if (!fixRightClick())
                 return;
 
-            if (!instance.getWorldManager().isMVWorld(bLoc.getWorld())) {
+            if (!mvp.isMVWorld(bLoc.getWorld())) {
                 Lang.NOT_LOADED_MULTIVERSE.sendTo(creator);
                 return;
             }
@@ -257,8 +260,8 @@ public class PortalCreator {
         String p1Name = instance.getPluginConfig().getPortal1Name(name);
         String p2Name = instance.getPluginConfig().getPortal2Name(name);
 
-        boolean exists = instance.getPortalManager().getAllPortals().stream()
-                .map(MVPortal::getName)
+        boolean exists = mvp.streamPortals()
+                .map(EMVPortal::getName)
                 .anyMatch(p -> p1Name.equalsIgnoreCase(p) || p2Name.equalsIgnoreCase(p));
 
         if (exists) {
@@ -268,30 +271,19 @@ public class PortalCreator {
             Sound.NOTE_BASS.playTo(creator, 1f, 1f);
         } else {
             // create
-            createPortals(p1Name, p2Name);
-            Lang.PORTAL_CREATED.sendTo(creator, name);
             close();
-            Sound.PLAYER_LEVELUP.playTo(creator, 1f, 1f);
+            if (createPortals(p1Name, p2Name)) {
+                Lang.PORTAL_CREATED.sendTo(creator, name);
+                Sound.PLAYER_LEVELUP.playTo(creator, 1f, 1f);
+            } else {
+                Lang.PORTAL_CREATE_FAILED.sendTo(creator);
+                Sound.NOTE_BASS.playTo(creator, 1f, 1f);
+            }
         }
     }
 
 
     //
-    private String yawToDirection(float yaw) {
-        if (yaw < 0) yaw += 360;
-        yaw %= 360;
-        int i = (int)((yaw+45) / 90);
-        if (i == 1) {
-            return "w";
-        } else if (i == 2) {
-            return "n";
-        } else if (i == 3) {
-            return "e";
-        } else {
-            return "s";
-        }
-    }
-
     private boolean fixRightClick() {
         // 前のクリックから10ms以上待つ (PlayerInteractEventが二重に発火するFix)
         if (System.currentTimeMillis() - rightFixLast > 10) {
@@ -330,8 +322,8 @@ public class PortalCreator {
         String p1Name = instance.getPluginConfig().getPortal1Name(name);
         String p2Name = instance.getPluginConfig().getPortal2Name(name);
 
-        boolean exists = instance.getPortalManager().getAllPortals().stream()
-                .map(MVPortal::getName)
+        boolean exists = mvp.streamPortals()
+                .map(EMVPortal::getName)
                 .anyMatch(p -> p1Name.equalsIgnoreCase(p) || p2Name.equalsIgnoreCase(p));
 
         if (exists) {
@@ -342,11 +334,14 @@ public class PortalCreator {
         guiRetry = false;
 
         // portal creation
-        createPortals(p1Name, p2Name);
-
-        Lang.PORTAL_CREATED.sendTo(creator, name);
         close();
-        Sound.PLAYER_LEVELUP.playTo(creator, 1f, 1f);
+        if (createPortals(p1Name, p2Name)) {
+            Lang.PORTAL_CREATED.sendTo(creator, name);
+            Sound.PLAYER_LEVELUP.playTo(creator, 1f, 1f);
+        } else {
+            Lang.PORTAL_CREATE_FAILED.sendTo(creator);
+            Sound.NOTE_BASS.playTo(creator, 1f, 1f);
+        }
         return Collections.singletonList(AnvilGUI.ResponseAction.close());
     }
 
@@ -355,14 +350,4 @@ public class PortalCreator {
         PORTAL_A, PORTAL_B
     }
 
-
-
-    //
-    private Material getGoldenHoe() {
-        Material m = Material.getMaterial("GOLDEN_HOE");
-        if (m == null) {
-            m = Material.getMaterial("GOLD_HOE");  // legacy
-        }
-        return m;
-    }
 }

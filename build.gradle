@@ -6,7 +6,7 @@ plugins {
 }
 
 group = 'com.gmail.necnionch.myplugin.easymvportal'
-version = '1.1.2+1.21.4'
+version = '1.1.2+1.21.4+MV5'
 
 repositories {
     mavenCentral()
@@ -27,6 +27,8 @@ repositories {
         name = "codemc-snapshots"
         url = "https://repo.codemc.io/repository/maven-snapshots/"
     }
+
+    maven { url = "https://repo.onarandombox.com/content/groups/public/" }
 }
 
 dependencies {
@@ -34,6 +36,8 @@ dependencies {
 
     compileOnly files("lib/Multiverse-Core-4.2.2.jar")
     compileOnly files("lib/Multiverse-Portals-4.2.0.jar")
+    compileOnly 'org.mvplugins.multiverse.core:multiverse-core:5.0.0'
+    compileOnly 'org.mvplugins.multiverse.portals:multiverse-portals:5.2.0'
     compileOnly files("lib/worldedit-bukkit-7.1.0.jar")
 
     implementation 'net.wesjd:anvilgui:1.10.4-SNAPSHOT'

@@ -51,8 +51,23 @@ public class Utils {
         }
     }
 
+    public static String yawToDirection(float yaw) {
+        if (yaw < 0) yaw += 360;
+        yaw %= 360;
+        int i = (int) ((yaw + 45) / 90);
+        if (i == 1) {
+            return "w";
+        } else if (i == 2) {
+            return "n";
+        } else if (i == 3) {
+            return "e";
+        } else {
+            return "s";
+        }
+    }
 
-
-
+    public static String formatPortalDestinationAction(String portalName, float yaw) {
+        return "p:" + portalName + ":" + Utils.yawToDirection(yaw);
+    }
 
 }

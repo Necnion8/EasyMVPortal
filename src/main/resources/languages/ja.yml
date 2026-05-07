@@ -22,6 +22,7 @@ select-portal2: "&6ポータル2の位置を指定してください。"
 
 cancel: "&c中止しました！"
 portal-created: "&aポータルを作成しました: &f{0}"
+portal-create-failed: "&cポータルを作成できませんでした。"
 not-loaded-multiverse: "&cこのワールドはMultiverseによってロードされていません！"
 inventory-full: "&c持ち物がいっぱいです！"
 

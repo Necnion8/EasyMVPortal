@@ -22,6 +22,7 @@ select-portal2: "&6Please specify the second portal."
 
 cancel: "&cCancelled!"
 portal-created: "&aPortal created: &f{0}"
+portal-create-failed: "&cCould not create portal."
 not-loaded-multiverse: "&cThis world is not loaded by Multiverse!"
 inventory-full: "&cInventory is full!"
 

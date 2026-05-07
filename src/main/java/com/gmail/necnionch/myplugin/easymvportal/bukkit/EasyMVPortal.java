@@ -3,10 +3,9 @@ package com.gmail.necnionch.myplugin.easymvportal.bukkit;
 import com.gmail.necnionch.myplugin.easymvportal.bukkit.commands.MainCommand;
 import com.gmail.necnionch.myplugin.easymvportal.bukkit.config.MainConfig;
 import com.gmail.necnionch.myplugin.easymvportal.bukkit.config.MessageConfig;
-import com.onarandombox.MultiverseCore.MultiverseCore;
-import com.onarandombox.MultiverseCore.api.MVWorldManager;
-import com.onarandombox.MultiversePortals.MultiversePortals;
-import com.onarandombox.MultiversePortals.utils.PortalManager;
+import com.gmail.necnionch.myplugin.easymvportal.bukkit.mvp.EMVPManager;
+import com.gmail.necnionch.myplugin.easymvportal.bukkit.mvp.impl.EMVPManagerImpl2_4;
+import com.gmail.necnionch.myplugin.easymvportal.bukkit.mvp.impl.EMVPManagerImpl5;
 import net.wesjd.anvilgui.version.VersionMatcher;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -33,10 +32,7 @@ public final class EasyMVPortal extends JavaPlugin implements Listener {
     private final HashMap<Player, PortalCreator> creatorSessions = new HashMap<>();
     private MainConfig mainConfig;
     private MessageConfig messageConfig;
-    private MultiverseCore mvPlugin;
-    private MultiversePortals mvpPlugin;
-    private PortalManager portalManager;
-    private MVWorldManager worldManager;
+    private EMVPManager emvpManager;
     private boolean useGUI;
 
     static public EasyMVPortal getInstance() {
@@ -65,21 +61,19 @@ public final class EasyMVPortal extends JavaPlugin implements Listener {
         mainConfig.load();
         messageConfig.load(mainConfig.getLanguageName());
 
+        emvpManager = null;
         try {
-            mvPlugin = (MultiverseCore) getServer().getPluginManager().getPlugin("Multiverse-Core");
-            mvpPlugin = (MultiversePortals) getServer().getPluginManager().getPlugin("Multiverse-Portals");
-        } catch (Exception e) {
-            getLogger().log(Level.WARNING, "Failed to load Multiverse-Portals!", e);
+            emvpManager = EMVPManagerImpl5.init();
+        } catch (RuntimeException e) {
+            try {
+                emvpManager = EMVPManagerImpl2_4.init();
+            } catch (RuntimeException ex) {
+                getLogger().log(Level.SEVERE, "Failed to hook to Multiverse-Core/Portals v2-5 API", e);
+                setEnabled(false);
+                return;
+            }
         }
 
-        if (mvPlugin == null || mvpPlugin == null) {
-            getLogger().severe("Hook failed!");
-            setEnabled(false);
-            return;
-        }
-
-        portalManager = mvpPlugin.getPortalManager();
-        worldManager = mvPlugin.getMVWorldManager();
         getCommand("easymvportal").setExecutor(new MainCommand(this));
         getServer().getPluginManager().registerEvents(this, this);
         getServer().getPluginManager().registerEvents(new Event_1_9_Listener(), this);
@@ -106,16 +100,8 @@ public final class EasyMVPortal extends JavaPlugin implements Listener {
         creatorSessions.remove(player);
     }
 
-    public PortalManager getPortalManager() {
-        return portalManager;
-    }
-
-    public MVWorldManager getWorldManager() {
-        return worldManager;
-    }
-
-    public MultiversePortals getMvpPlugin() {
-        return mvpPlugin;
+    public EMVPManager getMVP() {
+        return emvpManager;
     }
 
     public MainConfig getPluginConfig() {

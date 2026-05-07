@@ -32,6 +32,7 @@ public enum Lang {
 
     CANCEL("&cCancelled!"),
     PORTAL_CREATED("&aPortal created: &f{0}"),
+    PORTAL_CREATE_FAILED("&cCould not create portal!"),
     NOT_LOADED_MULTIVERSE("&cThis world is not loaded by Multiverse!"),
     INVENTORY_FULL("&cInventory is full!"),
 
