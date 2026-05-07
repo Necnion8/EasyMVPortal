@@ -10,35 +10,28 @@ version = '1.1.2+1.21.4+MV5'
 
 repositories {
     mavenCentral()
-    maven {
-        name = 'spigotmc-repo'
-        url = 'https://hub.spigotmc.org/nexus/content/repositories/snapshots/'
-    }
-    maven {
-        name = 'sonatype'
-        url = 'https://oss.sonatype.org/content/groups/public/'
-    }
 
-    maven {
-        url = "https://jitpack.io"
-    }
+    // Spigot
+    maven { url = 'https://hub.spigotmc.org/nexus/content/groups/public/' }
 
-    maven {
-        name = "codemc-snapshots"
-        url = "https://repo.codemc.io/repository/maven-snapshots/"
-    }
+    // AnvilGUI
+    maven { url = "https://repo.codemc.io/repository/maven-snapshots/" }
 
+    // Multiverse
     maven { url = "https://repo.onarandombox.com/content/groups/public/" }
+
+    // WorldEdit
+    maven { url = "https://maven.enginehub.org/repo/" }
 }
 
 dependencies {
     compileOnly 'org.spigotmc:spigot-api:1.18-R0.1-SNAPSHOT'
 
-    compileOnly files("lib/Multiverse-Core-4.2.2.jar")
-    compileOnly files("lib/Multiverse-Portals-4.2.0.jar")
+    compileOnly "com.onarandombox.multiversecore:Multiverse-Core:4.2.0"
+    compileOnly "com.onarandombox.multiverseportals:Multiverse-Portals:4.2.0"
     compileOnly 'org.mvplugins.multiverse.core:multiverse-core:5.0.0'
     compileOnly 'org.mvplugins.multiverse.portals:multiverse-portals:5.2.0'
-    compileOnly files("lib/worldedit-bukkit-7.1.0.jar")
+    compileOnly "com.sk89q.worldedit:worldedit-core:7.1.0"
 
     implementation 'net.wesjd:anvilgui:1.10.4-SNAPSHOT'
 }
