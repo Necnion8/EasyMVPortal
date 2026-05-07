@@ -69,11 +69,13 @@ public class EMVPManagerImpl5 implements EMVPManager {
     @Override
     public boolean createPortals(String ownerName, String p1Name, World p1World, Location p1Pos1, Location p1Pos2, String p2Name, World p2World, Location p2Pos1, Location p2Pos2) {
         LoadedMultiverseWorld mvWorld = worlds.getLoadedWorld(p1World).getOrElseThrow(() -> new RuntimeException("World " + p1World.getName() + " is not MV world or not loaded"));
-        PortalLocation loc = new PortalLocation(p1Pos1.toVector(), p1Pos2.toVector(), mvWorld);
+        PortalLocation loc = new PortalLocation();
+        loc.setLocation(p1Pos1.toVector(), p1Pos2.toVector(), mvWorld);
         MVPortal p1 = new MVPortal(mvp, p1Name, ownerName, loc);
 
         mvWorld = worlds.getLoadedWorld(p2World).getOrElseThrow(() -> new RuntimeException("World " + p2World.getName() + " is not MV world or not loaded"));
-        loc = new PortalLocation(p2Pos1.toVector(), p2Pos2.toVector(), mvWorld);
+        loc = new PortalLocation();
+        loc.setLocation(p2Pos1.toVector(), p2Pos2.toVector(), mvWorld);
         MVPortal p2 = new MVPortal(mvp, p2Name, ownerName, loc);
 
         if (portals.addPortal(p1)) {

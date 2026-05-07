@@ -19,9 +19,6 @@ repositories {
 
     // Multiverse
     maven { url = uri("https://repo.onarandombox.com/content/groups/public/") }
-
-    // WorldEdit
-    maven { url = uri("https://maven.enginehub.org/repo/") }
 }
 
 dependencies {
@@ -31,7 +28,6 @@ dependencies {
     compileOnly "com.onarandombox.multiverseportals:Multiverse-Portals:4.2.0"
     compileOnly "org.mvplugins.multiverse.core:multiverse-core:5.0.0"
     compileOnly "org.mvplugins.multiverse.portals:multiverse-portals:5.2.0"
-    compileOnly "com.sk89q.worldedit:worldedit-core:7.1.0"
 
     implementation "net.wesjd:anvilgui:1.10.11-SNAPSHOT"
 }
