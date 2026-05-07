@@ -6,22 +6,22 @@ plugins {
 }
 
 group = 'com.gmail.necnionch.myplugin.easymvportal'
-version = '1.1.2+1.21.4+MV5'
+version = '1.1.2+1.21.11'
 
 repositories {
     mavenCentral()
 
     // Spigot
-    maven { url = 'https://hub.spigotmc.org/nexus/content/groups/public/' }
+    maven { url = uri('https://hub.spigotmc.org/nexus/content/groups/public/') }
 
     // AnvilGUI
-    maven { url = "https://repo.codemc.io/repository/maven-snapshots/" }
+    maven { url = uri("https://mvn.wesjd.net") }
 
     // Multiverse
-    maven { url = "https://repo.onarandombox.com/content/groups/public/" }
+    maven { url = uri("https://repo.onarandombox.com/content/groups/public/") }
 
     // WorldEdit
-    maven { url = "https://maven.enginehub.org/repo/" }
+    maven { url = uri("https://maven.enginehub.org/repo/") }
 }
 
 dependencies {
@@ -29,35 +29,28 @@ dependencies {
 
     compileOnly "com.onarandombox.multiversecore:Multiverse-Core:4.2.0"
     compileOnly "com.onarandombox.multiverseportals:Multiverse-Portals:4.2.0"
-    compileOnly 'org.mvplugins.multiverse.core:multiverse-core:5.0.0'
-    compileOnly 'org.mvplugins.multiverse.portals:multiverse-portals:5.2.0'
+    compileOnly "org.mvplugins.multiverse.core:multiverse-core:5.0.0"
+    compileOnly "org.mvplugins.multiverse.portals:multiverse-portals:5.2.0"
     compileOnly "com.sk89q.worldedit:worldedit-core:7.1.0"
 
-    implementation 'net.wesjd:anvilgui:1.10.4-SNAPSHOT'
+    implementation "net.wesjd:anvilgui:1.10.11-SNAPSHOT"
 }
 
 tasks.named("shadowJar", ShadowJar) {
     archiveClassifier.set("")
-    dependencies {
-        exclude "/META-INF/**"
-    }
+    exclude "/META-INF/**"
     relocate "net.wesjd.anvilgui", "${project.group}.libs.anvilgui"
 }
 
 def targetJavaVersion = 8
 java {
-    def javaVersion = JavaVersion.toVersion(targetJavaVersion)
-    sourceCompatibility = javaVersion
-    targetCompatibility = javaVersion
-    if (JavaVersion.current() < javaVersion) {
-        toolchain.languageVersion = JavaLanguageVersion.of(targetJavaVersion)
-    }
+    sourceCompatibility = JavaVersion.toVersion(targetJavaVersion)
+    targetCompatibility = JavaVersion.toVersion(targetJavaVersion)
 }
 
 tasks.withType(JavaCompile).configureEach {
-    if (targetJavaVersion >= 10 || JavaVersion.current().isJava10Compatible()) {
-        options.release.set(targetJavaVersion)
-    }
+    options.release.set(targetJavaVersion)
+    options.encoding = 'UTF-8'
 }
 
 processResources {
@@ -65,6 +58,6 @@ processResources {
     inputs.properties props
     filteringCharset 'UTF-8'
     filesMatching('plugin.yml') {
-        expand props
+        expand(props)
     }
 }

@@ -49,8 +49,7 @@ public final class EasyMVPortal extends JavaPlugin implements Listener {
             getLogger().warning(e.getLocalizedMessage());
             getLogger().info("ignored it!");
         } catch (Throwable e) {
-            getLogger().log(Level.SEVERE, "Unexpected error occurred while trying to load plugin: Unsupported server version?", e);
-            setEnabled(false);
+            getLogger().log(Level.WARNING, "Failed to check AnvilGUI: Unsupported server version?", e);
         }
 
         instance = this;
